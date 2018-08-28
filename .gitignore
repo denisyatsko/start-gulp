@@ -1,4 +1,3 @@
-*.txt
 !/robots.txt
 !.gitkeep
 .submodules

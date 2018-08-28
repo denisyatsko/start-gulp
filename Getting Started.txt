@@ -1,0 +1,10 @@
+1) Add new folder to Open Server with project and add domain in setting \NAME_FOLDER\app
+2) write new proxy in gulpfile.js proxy: DOMAIN_NAME
+3) Install node.js
+4) npm -v and node -v
+5) npm i -g gulp npm-check-updates
+6) gulp -v
+7) ncu
+8) ncu -a
+9) npm i
+10) gulp ;)
