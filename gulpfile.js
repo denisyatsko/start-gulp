@@ -1,5 +1,5 @@
 var 	gulp           = require('gulp'),
-		gutil          = require('gulp-util' ),
+		gutil          = require('gulp-util'),
 		sass           = require('gulp-sass'),
 		browserSync    = require('browser-sync'),
 		concat         = require('gulp-concat'),
@@ -10,7 +10,7 @@ var 	gulp           = require('gulp'),
 		imagemin       = require('gulp-imagemin'),
 		cache          = require('gulp-cache'),
 		autoprefixer   = require('gulp-autoprefixer'),
-		notify         = require("gulp-notify");
+		notify         = require("gulp-notify"),
 		babel          = require('gulp-babel');
 
 // Скрипты проекта
@@ -34,7 +34,7 @@ gulp.task('compileJS', function() {
 
 gulp.task('browser-sync', function() {
 	browserSync({
-		proxy: "test",
+		proxy: "GulpTest",
 		notify: false
 	});
 });
