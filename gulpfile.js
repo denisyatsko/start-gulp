@@ -7,11 +7,11 @@ var 	gulp           = require('gulp'),
 		cleanCSS       = require('gulp-clean-css'),
 		rename         = require('gulp-rename'),
 		del            = require('del'),
-		imagemin       = require('gulp-imagemin'),
 		cache          = require('gulp-cache'),
 		autoprefixer   = require('gulp-autoprefixer'),
 		notify         = require("gulp-notify"),
-		babel          = require('gulp-babel');
+		babel          = require('gulp-babel'),
+		svgo           = require('gulp-svgo');
 
 // Скрипты проекта
 
@@ -20,6 +20,7 @@ gulp.task('js', function() {
 		'app/libs/tinyslider/tiny-slider.js',
 		])
 	.pipe(concat('scripts.min.js'))
+	.pipe(uglify())  
 	.pipe(gulp.dest('app/js'))
 	.pipe(browserSync.reload({stream: true}));
 });
@@ -27,7 +28,7 @@ gulp.task('js', function() {
 gulp.task('compileJS', function() {     
 	return gulp.src([       
 		'app/js/es6/*.js'])       
-	.pipe(babel({presets: ['es2015']}))   
+	.pipe(babel({presets: ['es2015']})) 
 	.pipe(gulp.dest('app/js'))
 	.pipe(browserSync.reload({stream: true}));
 });
@@ -54,10 +55,19 @@ gulp.task('watch', ['sass', 'js', 'browser-sync', 'compileJS'], function() {
 	gulp.watch('app/*.html', browserSync.reload);
 });
 
-gulp.task('imagemin', function() {
-	return gulp.src('app/img/**/*')
-	.pipe(cache(imagemin()))
-	.pipe(gulp.dest('dist/img'));
+gulp.task('images', function() {
+    return gulp.src('app/img/**/*')
+    .pipe(gulp.dest('dist/img'));
+});
+
+gulp.task('icons', function() {
+    return gulp.src('app/icons/**/*')
+    .pipe(svgo({
+        plugins: [
+            { cleanupIDs: false },
+        ]
+    }))
+    .pipe(gulp.dest('dist/icons'));
 });
 
 gulp.task('build', ['removedist', 'imagemin', 'sass', 'js'], function() {
