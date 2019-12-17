@@ -1,0 +1,186 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	min-width: 320px;
+	position: relative;
+	line-height: 1.75;
+	font-size: 18px;
+	overflow-x: hidden;
+	opacity: 1;
+	display: flex;
+	flex-direction: column;
+	flex: auto;
+	font-family: $default;
+	min-height: 100vh;
+	text-size-adjust: 100%;
+    font-variant-ligatures: none;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    	height: 100vh;
+    }
+}
+
+ul, li {
+	list-style-type: none;
+}
+
+img {
+	max-width: 100%;
+}
+
+p {
+	font-size: 16px;
+	line-height: 24px;
+	margin-bottom: 15px;
+}
+
+p::selection,
+h1::selection,
+h2::selection,
+h3::selection,
+h4::selection,
+span::selection,
+label::selection,
+li::selection,
+strong::selection,
+b::selection {
+	background: $green__palletColor3;
+}
+
+a,
+a:hover,
+a:focus {
+	text-decoration: none;
+	outline-offset: 0;
+	outline: none;
+}
+
+button,
+button:hover,
+button:focus {
+	outline: none;
+	outline-offset: 0;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+	outline-offset: 0;
+}
+
+textarea {
+	overflow: hidden;
+	resize: none;
+}
+
+// --------------- Safari, Chrome, Edge, Opera --------------------
+
+// scrollbar start
+::-webkit-scrollbar {
+	width: 5px;
+	background-color: #b6b6b6;
+}
+::-webkit-scrollbar:horizontal {
+	height: 3px;
+}
+::-webkit-scrollbar-thumb {
+	border-width: 1px 1px 1px 2px;
+	border-color: #b6b6b6;
+	background-color: $green__palletColor8;
+}
+::-webkit-scrollbar-track {
+	border-width: 0;
+}
+// scrollbar end
+
+// placeholder start
+::-webkit-input-placeholder {
+	font-family: $default;
+	color: $textColor;
+	font-size: 14px;
+	opacity: 1;
+	transition: opacity 0.3s ease;
+}
+
+:focus::-webkit-input-placeholder {
+	opacity: 0;
+}
+// placeholder end
+
+// --------------- Mozilla --------------------
+
+// Firefox 50+
+::-moz-placeholder {
+	font-family: $default;
+	color: $textColor;
+	font-size: 14px;
+	opacity: 1;
+}
+
+:focus::-moz-placeholder {
+	opacity: 0;
+}
+
+// Firefox 50-
+:-moz-placeholder {
+	font-family: $default;
+	color: $textColor;
+	font-size: 14px;
+	opacity: 1;
+}
+
+:focus:-moz-placeholder {
+	opacity: 0;
+}
+
+// --------------- IE 11 --------------------
+
+:-ms-input-placeholder {
+	font-family: $default;
+	color: $textColor;
+	font-size: 14px;
+	opacity: 1;
+	transition: opacity 0.3s ease;
+}
+
+:focus:-ms-input-placeholder {
+	opacity: 0;
+}
+
+.scrollbar	{
+	&::-webkit-scrollbar {
+		width: 10px;
+		background-color: transparent;
+	}
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		border-top: 3px solid transparent;
+		border-bottom: 3px solid transparent;
+		border-right: 3px solid transparent;
+		background-color: transparent;
+	}
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		box-shadow: inset 5px 0 0 $textColor;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		background-color: transparent;
+		border-top: 5px solid transparent;
+		border-bottom: 5px solid transparent;
+	}
+}
+
+// animate <details> toggle content
+details[open] summary + * {
+	animation: slide .3s ease-in-out;
+}
+
+@keyframes slide {
+	0%    {opacity: 0; transform:  translate(0, -10px); }
+	100%  {opacity: 1; transform:  translate(0, 0);}
+}

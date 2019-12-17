@@ -1,0 +1,47 @@
+.toggle-menu {
+	display: block;
+	position: relative;
+	width: 30px;
+	height: 21px;
+	margin: 0;
+	order: 1;
+	transform: rotate(0deg);
+	flex-shrink: 0;
+	transition: .5s ease-in-out;
+	@media #{$desktop} {
+		display: none;
+	}
+	&__line {
+		display: block;
+		position: absolute;
+		height: 3px;
+		width: 100%;
+		background: $green__palletColor3;
+		border-radius: 20px;
+		opacity: 1;
+		margin: auto;
+		transform: rotate(0deg);
+		transition: all .35s ease-in-out;
+		&:nth-child(1) {
+			top: 0;
+		}
+		&:nth-child(2) {
+			top: 9px;
+			right: 0;
+			width: 80%;
+		}
+	}
+	&.on .toggle-menu__line:nth-child(1) {
+		top: 12px;
+		transform: rotate(135deg);
+	}
+	&.on .toggle-menu__line:nth-child(2) {
+		top: 12px;
+		transform: rotate(-135deg);
+		width: 100%;
+	}
+	&.on ~ .header__main-menu {
+		opacity: 1;
+		left: 0;
+	}
+}

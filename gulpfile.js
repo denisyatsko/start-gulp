@@ -1,14 +1,20 @@
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const browserSync = require('browser-sync');
-const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
-const del = require('del');
-const cache = require('gulp-cache');
-const autoprefixer = require('gulp-autoprefixer');
-const notify = require('gulp-notify');
-const babel = require('gulp-babel');
-const svgo = require('gulp-svgo');
+const gulp = require('gulp'),
+  gutil = require('gulp-util'),
+  sass = require('gulp-sass'),
+  browserSync = require('browser-sync'),
+  concat = require('gulp-concat'),
+  uglify = require('gulp-uglify'),
+  del = require('del'),
+  cache = require('gulp-cache'),
+  autoprefixer = require('autoprefixer');
+  notify = require('gulp-notify'),
+  babel = require('gulp-babel'),
+  postcss = require('gulp-postcss'),
+  scss = require('postcss-scss'),
+  mqpacker = require('css-mqpacker'),
+  nested = require('postcss-nested'),
+  cssnano = require('cssnano'),
+  svgo = require('gulp-svgo');
 
 require('babel-core/register');
 require('babel-polyfill');
@@ -16,46 +22,61 @@ require('babel-polyfill');
 // Скрипты проекта
 gulp.task('js', function () {
   return gulp.src([
-    'app/libs/classlist-polyfill/index.js',
-    'app/libs/nodelist-foreach-polyfill/index.js',
-    'app/libs/element-closest/element-closest.js',
-    'app/libs/svgxuse/svgxuse.min.js',
-    'app/libs/tinyslider/tiny-slider.js',
-    'app/libs/promise/polyfill.min.js',
-    'app/libs/regenerator-runtime/runtime.js',
-    'app/libs/fetch/fetch.js'
+    'node_modules/fetch-ie8/fetch.js',
+    'node_modules/es6-promise/dist/es6-promise.min.js',
+    'node_modules/es6-promise/dist/es6-promise.auto.min.js',
+    'node_modules/regenerator-runtime/runtime.js',
+    'node_modules/intersection-observer/intersection-observer.js',
+    'node_modules/svgxuse/svgxuse.min.js',
+    'node_modules/element-closest/browser.js',
+    'node_modules/nodelist-foreach-polyfill/index.js',
+    'node_modules/classlist-polyfill/src/index.js',
+    'node_modules/tiny-slider/dist/min/tiny-slider.js',
+    'node_modules/details-element-polyfill/dist/details-element-polyfill.js',
   ])
     .pipe(concat('scripts.min.js'))
-    .pipe(uglify().on('error', console.error))
+    .pipe(uglify())
     .pipe(gulp.dest('app/js'))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('compileJS', function () {
   return gulp.src([
     'app/js/es6/*.js'])
-    .pipe(babel({ presets: ['es2015', 'stage-0'] }))
+    .pipe(babel({presets: ['es2015', 'stage-0']}))
     .pipe(gulp.dest('app/js'))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('browser-sync', function () {
   browserSync({
-    proxy: 'GulpTest',
+    proxy: "NAME",
     notify: false
   });
 });
 
-gulp.task('sass', function () {
-  return gulp.src('app/sass/main.sass')
-    .pipe(sass({ outputStyle: 'expand' }).on('error', notify.onError()))
-    .pipe(autoprefixer(['last 15 versions']))
+gulp.task('scss', function () {
+  let plugins = [
+    nested,
+    mqpacker,
+    autoprefixer,
+    cssnano
+  ];
+
+  var src = [
+    'app/scss/style.scss',
+    'app/scss/404.scss'
+  ];
+
+  return gulp.src(src)
+    .pipe(sass({outputStyle: 'expand'}).on("error", notify.onError()))
+    .pipe(postcss(plugins, {syntax: scss}))
     .pipe(gulp.dest('app/css'))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('watch', ['sass', 'js', 'browser-sync', 'compileJS'], function () {
-  gulp.watch('app/sass/**/*.sass', ['sass']);
+gulp.task('watch', ['scss', 'js', 'browser-sync', 'compileJS'], function () {
+  gulp.watch('app/scss/**/*.scss', ['scss']);
   gulp.watch(['libs/**/*.js'], ['js']);
   gulp.watch(['app/js/**/*.js'], ['compileJS']);
   gulp.watch('app/*.html', browserSync.reload);
@@ -70,31 +91,34 @@ gulp.task('icons', function () {
   return gulp.src('app/icons/**/*')
     .pipe(svgo({
       plugins: [
-        { cleanupIDs: false }
+        {cleanupIDs: false},
       ]
     }))
     .pipe(gulp.dest('dist/icons'));
 });
 
-gulp.task('build', ['removedist', 'imagemin', 'sass', 'js'], function () {
-  gulp.src([
+gulp.task('build', ['removedist', 'icons', 'images', 'scss', 'js'], function () {
+
+  var buildFiles = gulp.src([
     'app/*.html',
-    'app/.htaccess'
+    'app/.htaccess',
   ]).pipe(gulp.dest('dist'));
 
-  gulp.src([
-    'app/css/main.css'
+  var buildCss = gulp.src([
+    'app/css/style.css',
+    'app/css/404.css',
   ]).pipe(gulp.dest('dist/css'));
 
-  gulp.src([
-    'app/js/jquery-3.2.1.min.js',
+  var buildJs = gulp.src([
+    'app/js/jquery.min.js',
     'app/js/scripts.min.js',
-    'app/js/common.js'
+    'app/js/common.js',
   ]).pipe(gulp.dest('dist/js'));
 
-  gulp.src([
-    'app/fonts/**/*'
+  var buildFonts = gulp.src([
+    'app/fonts/**/*',
   ]).pipe(gulp.dest('dist/fonts'));
+
 });
 
 gulp.task('removedist', function () {

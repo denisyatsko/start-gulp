@@ -1,0 +1,40 @@
+.loader-wrapper {
+	background: white;
+	visibility: visible;
+	opacity: 1;
+	position: fixed;
+	z-index: 9999;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transition: opacity ease-out 0.5s;
+
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 1.75s infinite linear;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: scale(1.2) rotate(65deg);
+  }
+  25% {
+    transform: scale(1.0) rotate(130deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(200deg);
+  }
+  75% {
+    transform: scale(1.0) rotate(270deg);
+  }
+  100% {
+    transform: scale(1.2) rotate(360deg);
+  }
+}
